@@ -66,7 +66,11 @@ int main()
         std::getline(std::cin, inLine);
 
         parseInputLine(inLine, operation, value);
-        float fValue = std::stof(value);
+        
+        float fValue = 0.0f;
+        if (value != "") {
+            fValue = std::stof(value);
+        }
 
         switch (operation)
         {

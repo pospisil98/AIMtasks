@@ -140,7 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AIMtasks.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Image.cpp" />
   </ItemGroup>
   <ItemGroup>

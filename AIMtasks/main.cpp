@@ -7,6 +7,7 @@
 #include <Windows.h>
 
 #include "Image.hpp"
+#include "Kernel.hpp"
 
 
 /// <summary>
@@ -49,8 +50,7 @@ void parseInputLine(std::string inLine, char &operation, std::string &value) {
 }
 
 
-int main()
-{
+void Task1Main() {
     //std::string inputPath = "in.jpg";
     std::string inputPath = "in_eq.jpg";
 
@@ -61,12 +61,12 @@ int main()
     Image image(inputPath);
 
     printHelp();
-    do {    
+    do {
         std::cout << std::endl << "Your input: ";
         std::getline(std::cin, inLine);
 
         parseInputLine(inLine, operation, value);
-        
+
         float fValue = 0.0f;
         if (value != "") {
             fValue = std::stof(value);
@@ -74,7 +74,7 @@ int main()
 
         switch (operation)
         {
-        case 'n':   
+        case 'n':
             std::cout << "Doing NEGATIVE operation and saving" << std::endl;
             image.doOperation(Image::MonadicOperationType::NEGATIVE);
             break;
@@ -134,4 +134,62 @@ int main()
             break;
         }
     } while (operation != 'q');
+}
+
+void Task2Main() {
+    //std::string in = "lena.png";
+    std::string in = "square.png";
+ 
+
+    Image image(in);
+    image.computeSpectrum();
+    image.save("spectrum_", Image::OperationDataSource::SPECTRUM);
+
+    std::vector<float> rec = image.reconstructImageFromSpectrum();
+
+    Image reconstructed(rec, "reconstructed.jpg", image.width, image.height, 3);
+    reconstructed.save();
+}
+
+void Task3Main() {
+    Image im("lena.png");
+
+    Kernel k1(10);
+    k1.CreateGauss(1.0f);
+    std::vector<float> dest1;
+    im.Convolute(k1, Kernel::Type::Kernel_2D, dest1);
+    Image result1(dest1, "result1.jpg", im.width, im.height, 3);
+    result1.save();
+
+    Kernel k2(10);
+    k1.CreateGauss(1.0f);
+    std::vector<float> dest2;
+    im.Convolute(k1, Kernel::Type::Kernel_1D, dest2);
+    Image result2(dest2, "result2_1D.jpg", im.width, im.height, 3);
+    result2.save();
+
+    Kernel k3(10);
+    k3.CreateGauss(1.5f);
+    std::vector<float> dest3;
+    im.Convolute(k3, Kernel::Type::Kernel_2D, dest3);
+    Image result3(dest3, "result3.jpg", im.width, im.height, 3);
+    result3.save();
+
+    Kernel k4(10);
+    k4.CreateGauss(4.0f);
+    std::vector<float> dest4;
+    im.Convolute(k4, Kernel::Type::Kernel_2D, dest4);
+    Image result4(dest4, "result4.jpg", im.width, im.height, 3);
+    result4.save();
+}
+
+int main() {
+    // Task 1
+    // Task1Main();
+
+    // Task 2
+    //Task2Main();
+
+    // Task 3
+    Task3Main();
 }

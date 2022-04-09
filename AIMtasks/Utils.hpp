@@ -3,7 +3,8 @@
 /// <summary>
 /// Namespace providing some utility functions or structures for using in AIM tasks.
 /// </summary>
-namespace Utils {
+namespace Utils
+{
 	/// <summary>
 	/// Struct for representing color of image pixels.
 	/// </summary>
@@ -23,6 +24,11 @@ namespace Utils {
 	inline float luminanceFromRGB(const float r, const float g, const float b)
 	{
 		return 0.2126f * r + 0.7152f * g + 0.0722f * b;
+	}
+
+	inline float GaussianValue(float value, float sigma)
+	{
+		return expf(-(value * value) / 2.0f * (sigma * sigma));
 	}
 }
 

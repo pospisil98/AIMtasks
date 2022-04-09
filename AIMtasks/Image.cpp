@@ -406,3 +406,51 @@ void Image::Convolute1D(
         }
     }
 }
+
+void Image::ApplyBilateralFilter(
+    const float spatialSigma,
+    const float brightnessSigma,
+    std::vector<float>& outData
+) {
+    outData.resize(data.size());
+
+    int filterSize = 6 * spatialSigma + 1;
+    int center = filterSize / 2;
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            float intensitySum = 0.0f;
+            float normalization = 0.0f;
+
+            for (int fy = 0; fy < filterSize; fy++) {
+                int yOffset = fy - center;
+                for (int fx = 0; fx < filterSize; fx++) {
+                    int xOffset = fx - center;
+
+                    int imageFilterPosY = std::clamp(y + yOffset, 0, height - 1);
+                    int imageFilterPosX = std::clamp(x + xOffset, 0, width - 1);
+
+                    // Get distance from center of "kernel"
+                    float deltaX = (float)(xOffset - fx) / (float)filterSize;
+                    float deltaY = (float)(yOffset - fy) / (float)filterSize;
+                    float distFromCenter = sqrtf((deltaX * deltaX) + (deltaY * deltaY));
+
+                    // Get difference in intensities with log scaling
+                    float intensityDiff = logf(data[y * width + x]) - logf(data[imageFilterPosY * width + imageFilterPosX]);
+                    
+                    // Eval gaussians
+                    float distGauss = Utils::GaussianValue(distFromCenter, spatialSigma);
+                    float intensityGauss = Utils::GaussianValue(intensityDiff, brightnessSigma);
+
+                    // Calc intesity and store that for later usage
+                    float intensity = distGauss * intensityGauss * data[imageFilterPosY * width + imageFilterPosX];
+                    intensitySum += intensity;
+                    normalization += (distGauss * intensityGauss);
+                }
+            }
+
+            // Save normalized value
+            outData[y * width + x] = intensitySum / normalization;
+        }
+    }
+}

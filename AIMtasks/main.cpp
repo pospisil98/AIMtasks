@@ -8,6 +8,7 @@
 
 #include "Image.hpp"
 #include "Kernel.hpp"
+#include "main.h"
 
 
 /// <summary>
@@ -183,13 +184,42 @@ void Task3Main() {
     result4.save();
 }
 
+void Task4Main() {
+    float spatialSigma, brightnessSigma;
+    
+    Image im1("womanSlides.jpeg");
+    std::vector<float> d1;
+    im1.ApplyBilateralFilter(spatialSigma = 3.0f, brightnessSigma = 1.0f, d1);
+    Image r1(d1, "result1.jpg", im1.width, im1.height, 3);
+    r1.save();
+
+    std::vector<float> d2;
+    im1.ApplyBilateralFilter(spatialSigma = 3.0f, brightnessSigma = 4.0f, d2);
+    Image r2(d2, "result2.jpg", im1.width, im1.height, 3);
+    r2.save();
+
+    std::vector<float> d3;
+    im1.ApplyBilateralFilter(spatialSigma = 6.0f, brightnessSigma = 6.0f, d3);
+    Image r3(d3, "result3.jpg", im1.width, im1.height, 3);
+    r3.save();
+
+    Image im2("inNoise.jpg");
+    std::vector<float> d4;
+    im2.ApplyBilateralFilter(spatialSigma = 5.0f, brightnessSigma = 6.5f, d4);
+    Image r4(d4, "result4.jpg", im2.width, im2.height, 3);
+    r4.save();
+}
+
 int main() {
     // Task 1
     // Task1Main();
 
     // Task 2
-    //Task2Main();
+    // Task2Main();
 
     // Task 3
-    Task3Main();
+    // Task3Main();
+
+    // Task 4
+    Task4Main();
 }

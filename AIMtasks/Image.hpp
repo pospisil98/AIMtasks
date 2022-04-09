@@ -100,6 +100,18 @@ public:
     void Convolute(Kernel& kernel, Kernel::Type type, std::vector<float>& destination);
 
     /// <summary>
+    /// Applies bilateral filtering with given parameters and returns "filtered" data.
+    /// </summary>
+    /// <param name="spatialSigma"> Parameter of distance influence </param>
+    /// <param name="brightnessSigma"> Parameter of color difference influence </param>
+    /// <param name="outData"> Vector where to save filtered data </param>
+    void ApplyBilateralFilter(
+        const float spatialSigma,
+        const float brightnessSigma,
+        std::vector<float>& outData
+    );
+
+    /// <summary>
     /// Converts 2D index to 1D index to array (using internal image width).
     /// </summary>
     /// <param name="x">X coord</param>
